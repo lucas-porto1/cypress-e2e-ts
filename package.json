@@ -1,0 +1,37 @@
+{
+  "name": "cypress-e2e-ts",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "test": "cypress run",
+    "test:chrome": "cypress run --browser chrome",
+    "test:headed": "cypress run --headed",
+    "test:open": "cypress open",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm run typecheck && npm test"
+  },
+  "author": "Lucas Porto",
+  "license": "ISC",
+  "description": "TypeScript reference architecture for end-to-end test automation with Cypress.",
+  "allowScripts": {
+    "cypress": true
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "cypress": "^15.20.1",
+    "dotenv": "^17.4.2",
+    "eslint": "^10.8.1",
+    "eslint-plugin-cypress": "^7.0.0",
+    "eslint-plugin-mocha": "^12.0.2",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0"
+  }
+}

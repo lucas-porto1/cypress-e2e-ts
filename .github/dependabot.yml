@@ -1,0 +1,31 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: semiannually
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Keep the compiler within typescript-eslint's supported range.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+      # Keep Node.js types aligned with the Node.js 24 runtime used by the project.
+      - dependency-name: '@types/node'
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: semiannually
+    groups:
+      github-actions-minor-and-patch:
+        update-types:
+          - minor
+          - patch
