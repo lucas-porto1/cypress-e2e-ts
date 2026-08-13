@@ -11,6 +11,7 @@ A TypeScript reference architecture for end-to-end test automation with Cypress,
 - **Reuse authentication safely:** `cy.session()` caches the authenticated browser state without making tests depend on execution order.
 - **Protect credentials:** sensitive configuration is read with `cy.env()`, and the deprecated `Cypress.env()` API is disabled.
 - **Use resilient selectors:** prefer application-owned `data-*` attributes and use stable semantic IDs when the target application does not expose them.
+- **Synchronize with observable behavior:** use retried assertions and network aliases instead of fixed delays.
 - **Fail fast:** required environment values are checked when Cypress loads its configuration.
 
 ## Prerequisites

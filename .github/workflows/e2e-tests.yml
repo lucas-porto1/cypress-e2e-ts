@@ -20,7 +20,7 @@ jobs:
     env:
       BASE_URL: https://the-internet.herokuapp.com
       STANDARD_USER: tomsmith
-      USER_PASSWORD: SuperSecretPassword!
+      USER_PASSWORD: 'SuperSecretPassword!'
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
