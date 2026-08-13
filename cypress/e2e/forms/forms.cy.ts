@@ -1,9 +1,4 @@
-interface FormOptions {
-  dropdown: {
-    value: string;
-    label: string;
-  };
-}
+import type { FormOptions } from '../../fixtures/form-options.types.js';
 
 describe('Form controls', () => {
   it('selects and clears checkboxes', () => {

@@ -6,7 +6,7 @@ A TypeScript reference architecture for end-to-end test automation with Cypress,
 
 - **Follow Cypress conventions:** specs, fixtures, and support files remain under `cypress/`.
 - **Tests describe behavior:** assertions and scenario intent stay visible in `*.cy.ts` files.
-- **Avoid unnecessary Page Objects:** local helpers and focused custom commands keep flows readable without hiding every interaction behind a class.
+- **Avoid unnecessary Page Objects:** focused custom commands keep flows readable without hiding every interaction behind a class.
 - **Keep tests isolated:** each scenario controls its own state and can run independently.
 - **Reuse authentication safely:** `cy.session()` caches the authenticated browser state without making tests depend on execution order.
 - **Protect credentials:** sensitive configuration is read with `cy.env()`, and the deprecated `Cypress.env()` API is disabled.
@@ -75,9 +75,9 @@ npx cypress run --spec "cypress/e2e/auth/login.cy.ts"
 |   |   |-- auth/
 |   |   |-- dynamic/
 |   |   `-- forms/
-|   |-- fixtures/                 # static reusable test data
+|   |-- fixtures/                 # static test data and its TypeScript contracts
 |   `-- support/
-|       |-- commands.ts           # small, typed, cross-spec custom commands
+|       |-- commands.ts           # typed UI actions and shared setup commands
 |       `-- e2e.ts                # support entry point loaded before each spec
 |-- .env.example                  # documented local environment contract
 |-- cypress.config.ts             # environment, retries, E2E, and artifact settings
@@ -106,9 +106,9 @@ Required variables:
 
 1. Create a feature folder under `cypress/e2e/` when one does not already exist.
 2. Add a `*.cy.ts` spec containing the user behavior and assertions.
-3. Keep helpers local when they are useful only to that spec.
-4. Add a custom command only for a broadly reused action such as authentication.
-5. Put static reusable data under `cypress/fixtures/`.
+3. Keep specs focused on scenarios and assertions; place UI actions in typed custom commands.
+4. Keep `support/e2e.ts` lean and use it only to initialize global support such as commands.
+5. Put static reusable data and its closely related TypeScript contracts under `cypress/fixtures/`.
 6. Prefer application-owned `data-*` selectors and fall back to stable IDs or accessible semantics when necessary.
 7. Run `npm run check` before submitting the change.
 
