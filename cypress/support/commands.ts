@@ -2,7 +2,6 @@ declare global {
   namespace Cypress {
     interface Chainable {
       login(): Chainable<void>;
-      visitLoginPage(): Chainable<void>;
       submitLoginForm(username: string, password: string): Chainable<void>;
     }
   }
@@ -38,10 +37,6 @@ Cypress.Commands.add('login', () => {
       );
     },
   );
-});
-
-Cypress.Commands.add('visitLoginPage', () => {
-  cy.visit('/login');
 });
 
 Cypress.Commands.add('submitLoginForm', (username, password) => {

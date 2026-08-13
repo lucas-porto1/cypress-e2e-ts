@@ -10,7 +10,7 @@ describe('Login', () => {
   });
 
   beforeEach(() => {
-    cy.visitLoginPage();
+    cy.visit('/login');
   });
 
   it('allows a valid user to sign in', () => {

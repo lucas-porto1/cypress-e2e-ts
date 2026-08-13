@@ -92,7 +92,7 @@ The shared `cy.login()` command creates authentication through a programmatic fo
 
 The login screen remains covered through the UI in `login.cy.ts`. Other specs use the authentication endpoint because they need an authenticated precondition rather than another copy of the login test. This keeps the suite faster while preserving UI coverage of the real login behavior.
 
-`support/commands.ts` also exposes `cy.visitLoginPage()` and `cy.submitLoginForm()` so login specs remain focused on scenarios and assertions. `support/e2e.ts` intentionally contains only the commands import because Cypress loads this entry point before every spec.
+`support/commands.ts` also exposes `cy.submitLoginForm()` because it groups the repeated form interactions and prevents the password from appearing in the Cypress log. Simple native operations such as `cy.visit('/login')` remain directly in the spec because wrapping them would add indirection without reusable behavior. `support/e2e.ts` intentionally contains only the commands import because Cypress loads this entry point before every spec.
 
 ## Fixture typing
 
@@ -112,7 +112,7 @@ Required variables:
 
 1. Create a feature folder under `cypress/e2e/` when one does not already exist.
 2. Add a `*.cy.ts` spec containing the user behavior and assertions.
-3. Keep specs focused on scenarios and assertions; place UI actions in typed custom commands.
+3. Keep simple Cypress operations visible in specs; create typed custom commands only for repeated or multi-step flows that provide a meaningful abstraction.
 4. Keep `support/e2e.ts` lean and use it only to initialize global support such as commands.
 5. Put static reusable data and its closely related TypeScript contracts under `cypress/fixtures/`.
 6. Prefer application-owned `data-*` selectors and fall back to stable IDs or accessible semantics when necessary.
