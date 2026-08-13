@@ -92,6 +92,12 @@ The shared `cy.login()` command creates authentication through a programmatic fo
 
 The login screen remains covered through the UI in `login.cy.ts`. Other specs use the authentication endpoint because they need an authenticated precondition rather than another copy of the login test. This keeps the suite faster while preserving UI coverage of the real login behavior.
 
+`support/commands.ts` also exposes `cy.visitLoginPage()` and `cy.submitLoginForm()` so login specs remain focused on scenarios and assertions. `support/e2e.ts` intentionally contains only the commands import because Cypress loads this entry point before every spec.
+
+## Fixture typing
+
+Fixture-specific interfaces stay beside their JSON data, such as `form-options.json` and `form-options.types.ts`. Specs use `import type` so TypeScript validates the fixture contract without adding runtime JavaScript.
+
 ## Environment variables
 
 The root `.env` file is loaded only by the Node-side Cypress configuration. Credentials are passed to tests through Cypress configuration and read explicitly with the asynchronous `cy.env()` command. `allowCypressEnv: false` prevents new code from using the deprecated synchronous `Cypress.env()` API.
