@@ -1,10 +1,11 @@
 name: E2E Tests
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 permissions:
   contents: read
@@ -17,6 +18,8 @@ jobs:
   test:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    outputs:
+      report-artifact-id: ${{ steps.pages-artifact.outputs.artifact_id }}
     env:
       BASE_URL: https://the-internet.herokuapp.com
       STANDARD_USER: tomsmith
@@ -37,11 +40,44 @@ jobs:
         run: npm run typecheck
       - name: Run Cypress tests
         run: npm test
-      - name: Upload failure screenshots
+      - name: Upload failure evidence
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          name: cypress-failure-evidence
+          path: |
+            cypress/reports/html
+            cypress/screenshots
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 14
+      - name: Upload HTML report for GitHub Pages
+        id: pages-artifact
+        if: always() && github.ref == 'refs/heads/main' && hashFiles('cypress/reports/html/index.html') != ''
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: cypress/reports/html
+
+  publish-report:
+    name: Publish HTML report
+    needs: test
+    if: always() && github.ref == 'refs/heads/main' && needs.test.outputs.report-artifact-id != ''
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy report to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+      - name: Add report link to the job summary
+        env:
+          REPORT_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          echo '## Cypress test report' >> "$GITHUB_STEP_SUMMARY"
+          echo "[Open the latest HTML report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"

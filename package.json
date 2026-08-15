@@ -20,12 +20,19 @@
   "author": "Lucas Porto",
   "license": "ISC",
   "description": "TypeScript reference architecture for end-to-end test automation with Cypress.",
+  "overrides": {
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.1.0"
+    }
+  },
   "allowScripts": {
     "cypress": true
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
     "cypress": "^15.20.1",
+    "cypress-mochawesome-reporter": "^5.0.0",
     "dotenv": "^17.4.2",
     "eslint": "^10.8.1",
     "eslint-plugin-cypress": "^7.0.0",

@@ -81,6 +81,7 @@ npx cypress run --spec "cypress/e2e/auth/login.cy.ts"
 |   |   `-- forms/
 |   |-- fixtures/                 # static test data and its TypeScript contracts
 |   `-- support/
+|       |-- cypress-mochawesome-reporter.d.ts # reporter type declaration
 |       |-- commands.ts           # typed UI actions and shared setup commands
 |       `-- e2e.ts                # support entry point loaded before each spec
 |-- .env.example                  # documented local environment contract
@@ -96,7 +97,7 @@ The shared `cy.login()` command creates authentication through a programmatic fo
 
 The login screen remains covered through the UI in `login.cy.ts`. Other specs use the authentication endpoint because they need an authenticated precondition rather than another copy of the login test. This keeps the suite faster while preserving UI coverage of the real login behavior.
 
-`support/commands.ts` also exposes `cy.submitLoginForm()` because it groups the repeated form interactions and prevents the password from appearing in the Cypress log. Simple native operations such as `cy.visit('/login')` remain directly in the spec because wrapping them would add indirection without reusable behavior. `support/e2e.ts` intentionally contains only the commands import because Cypress loads this entry point before every spec.
+`support/commands.ts` also exposes `cy.submitLoginForm()` because it groups the repeated form interactions and prevents the password from appearing in the Cypress log. Simple native operations such as `cy.visit('/login')` remain directly in the spec because wrapping them would add indirection without reusable behavior. `support/e2e.ts` remains lean and initializes only shared commands and the HTML reporter integration before each spec.
 
 ## Fixture typing
 
@@ -122,10 +123,20 @@ Required variables:
 6. Prefer application-owned `data-*` selectors and fall back to stable IDs or accessible semantics when necessary.
 7. Run `npm run check` before submitting the change.
 
-## CI and artifacts
+## Reports
 
-The GitHub Actions workflow installs dependencies with Node.js 24, checks linting, formatting and types, and then runs the complete Cypress suite. Failure screenshots are uploaded as short-lived artifacts for debugging. Video recording remains disabled to keep this reference project lightweight.
+Each headless or headed run generates a self-contained Mochawesome report at `cypress/reports/html/index.html`. Failure screenshots are embedded in the report, while video recording remains disabled to keep this reference project lightweight. The latest report from `main` is available at [lucas-porto1.github.io/cypress-e2e-ts](https://lucas-porto1.github.io/cypress-e2e-ts/).
+
+## CI behavior
+
+The GitHub Actions workflow installs dependencies with Node.js 24, checks linting, formatting and types, and then runs the complete Cypress suite. Runs on `main` publish the HTML report to GitHub Pages and add its direct URL to the job summary. Pull requests do not replace the published report; the report and screenshots are retained as a short-lived artifact only when a run fails.
+
+Before the first deployment, select **GitHub Actions** as the Pages source under the repository's **Settings > Pages**.
 
 The demo credentials are public values published by the target site and can remain in the example workflow. Credentials for real systems must be stored as GitHub Actions repository secrets.
+
+Reports and screenshots can contain test data. Disable public Pages publishing or use access-controlled reporting infrastructure before reusing this setup with sensitive client systems.
+
+## Dependency maintenance
 
 Dependabot checks npm packages and GitHub Actions twice a year and groups minor and patch updates. Major updates remain separate for explicit review. TypeScript major updates are held until the linting toolchain supports them, and `@types/node` remains aligned with the Node.js runtime.

@@ -1,7 +1,12 @@
+import { createRequire } from 'node:module';
+
 import { defineConfig } from 'cypress';
 import dotenv from 'dotenv';
 
 dotenv.config({ quiet: true });
+
+const require = createRequire(import.meta.url);
+const registerMochawesomeReporter = require('cypress-mochawesome-reporter/plugin');
 
 function requireEnvironmentVariable(name: string): string {
   const value = process.env[name];
@@ -23,7 +28,18 @@ export default defineConfig({
   },
   e2e: {
     baseUrl: requireEnvironmentVariable('BASE_URL'),
+    setupNodeEvents(on) {
+      registerMochawesomeReporter(on);
+    },
     testIsolation: true,
+  },
+  reporter: 'cypress-mochawesome-reporter',
+  reporterOptions: {
+    charts: true,
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    reportPageTitle: 'Cypress E2E Test Report',
+    saveAllAttempts: false,
   },
   retries: {
     runMode: 2,
