@@ -1,4 +1,8 @@
-# Cypress E2E - TypeScript Reference
+# Cypress E2E — TypeScript Reference
+
+[![CI](https://github.com/lucas-porto1/cypress-e2e-ts/actions/workflows/e2e-tests.yml/badge.svg?branch=main)](https://github.com/lucas-porto1/cypress-e2e-ts/actions/workflows/e2e-tests.yml)
+
+_Part of [Lucas Porto's QA Automation Reference Collection](https://github.com/lucas-porto1): QA-first templates built for readability, reproducibility, and sustainable maintenance._
 
 A TypeScript reference architecture for end-to-end test automation with Cypress, reusable sessions, typed fixtures, resilient selectors, code quality checks, and CI execution.
 
